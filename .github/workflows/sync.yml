@@ -23,13 +23,12 @@ jobs:
           chmod +x tools/reflect2.sh
 
       - name: Process Task
-        env:
-          # Webhook will be handled inside your .sh files
         run: |
           if [ ! -s data/list.txt ]; then
             exit 0
           fi
 
+          # Extract one target
           RAW=$(head -n 1 data/list.txt)
           TARGET=$(echo "$RAW" | tr -d '\r' | xargs)
           sed -i '1d' data/list.txt
@@ -38,10 +37,9 @@ jobs:
             exit 0
           fi
 
-          # Silent processing - only Discord via your scripts
-          echo "Processing target..." > /dev/null
+          echo "Processing target: $TARGET" > /dev/null
 
-          # === Wayback URLs ===
+          # === Fetch Wayback URLs ===
           wget -qO urls.txt "https://web.archive.org/cdx/search/cdx?url=${TARGET}&matchType=domain&fl=original&collapse=urlkey&output=text&filter=statuscode:200" || true
 
           # === Filter Parameterized URLs ===
@@ -51,7 +49,7 @@ jobs:
           if [ -s q-urls.txt ]; then
             ./tools/dedup.sh -f q-urls.txt -o final-urls.txt
           else
-            # No parameters - just commit and move to next
+            # No parameters found, just update list
             git config --global user.name "system"
             git config --global user.email "system@noreply.github.com"
             git add data/list.txt
@@ -66,7 +64,7 @@ jobs:
             ./tools/reflect2.sh -l final-urls.txt -o results.txt
           fi
 
-          # Commit updated target list (silent)
+          # === Commit updated target list ===
           git config --global user.name "system"
           git config --global user.email "system@noreply.github.com"
           git add data/list.txt
