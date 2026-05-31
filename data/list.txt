@@ -1,4 +1,3 @@
-metamask.io
 api.playstation
 iws.cloud
 arenanetworks.com
