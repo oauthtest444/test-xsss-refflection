@@ -1,0 +1,77 @@
+name: Background Sync
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.MY_PAT_TOKEN }}
+
+      - name: Setup Tools
+        run: |
+          chmod +x tools/dedup.sh
+          chmod +x tools/reflect.sh
+          chmod +x tools/reflect2.sh
+
+      - name: Process Task
+        env:
+          # Webhook will be handled inside your .sh files
+        run: |
+          if [ ! -s data/list.txt ]; then
+            exit 0
+          fi
+
+          RAW=$(head -n 1 data/list.txt)
+          TARGET=$(echo "$RAW" | tr -d '\r' | xargs)
+          sed -i '1d' data/list.txt
+
+          if [ -z "$TARGET" ]; then
+            exit 0
+          fi
+
+          # Silent processing - only Discord via your scripts
+          echo "Processing target..." > /dev/null
+
+          # === Wayback URLs ===
+          wget -qO urls.txt "https://web.archive.org/cdx/search/cdx?url=${TARGET}&matchType=domain&fl=original&collapse=urlkey&output=text&filter=statuscode:200" || true
+
+          # === Filter Parameterized URLs ===
+          fgrep '?' urls.txt | egrep -i -v '\.(js|gif|jpg|jpeg|png|css|html|htm|gz|svg|ico|webp|avif|bmp|txt|pdf|xml|json|map|mp4|webm|ogv|mov|mp3|wav|ogg|flac|aac|m4a|woff|woff2|ttf|otf|eot|zip|rar|7z|tar)(\?|$)' > q-urls.txt || true
+
+          # === Deduplication ===
+          if [ -s q-urls.txt ]; then
+            ./tools/dedup.sh -f q-urls.txt -o final-urls.txt
+          else
+            # No parameters - just commit and move to next
+            git config --global user.name "system"
+            git config --global user.email "system@noreply.github.com"
+            git add data/list.txt
+            git commit -m "chore: update cache" -q
+            git push origin main -q
+            exit 0
+          fi
+
+          # === Run XSS Reflection Tools ===
+          if [ -s final-urls.txt ]; then
+            ./tools/reflect.sh -l final-urls.txt -o results.txt
+            ./tools/reflect2.sh -l final-urls.txt -o results.txt
+          fi
+
+          # Commit updated target list (silent)
+          git config --global user.name "system"
+          git config --global user.email "system@noreply.github.com"
+          git add data/list.txt
+
+          if ! git diff --cached --quiet; then
+            git commit -m "chore: sync update" -q
+            git push origin main -q
+          fi
