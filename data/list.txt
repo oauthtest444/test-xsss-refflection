@@ -1,4 +1,3 @@
-api.cx
 metamask.io
 api.playstation
 iws.cloud
