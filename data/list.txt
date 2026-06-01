@@ -1,4 +1,3 @@
-boredapeyachtclub.com
 braintree-api.com
 braintreegateway.com
 braintreepayments.com
