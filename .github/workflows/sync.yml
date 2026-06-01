@@ -61,7 +61,6 @@ jobs:
           # === Run XSS Reflection Tools ===
           if [ -s final-urls.txt ]; then
             ./tools/reflect.sh -l final-urls.txt -o results.txt
-            ./tools/reflect2.sh -l final-urls.txt -o results.txt
           fi
 
           # === Commit updated target list ===
