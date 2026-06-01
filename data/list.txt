@@ -1,4 +1,3 @@
-easy.ac
 edition.in
 elastic.co
 elasticnet.co
