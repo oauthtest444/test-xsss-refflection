@@ -1,4 +1,3 @@
-fromspotify.com
 gethypr.com
 getmeetio.com
 githubapp.com
