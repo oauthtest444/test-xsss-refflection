@@ -1,4 +1,3 @@
-budgetair.com
 byairbnb.com
 bybit.com
 bybit.eu
