@@ -1,4 +1,3 @@
-braintree.tools
 bridge.xyz
 browserstack.com
 buddypress.org
