@@ -1,4 +1,3 @@
-citrixworkspacesapi.net
 cloud.com
 cloudflare.com
 cloudflarepartners.com
