@@ -1,4 +1,3 @@
-braintreegateway.com
 braintreepayments.com
 braintree.tools
 bridge.xyz
