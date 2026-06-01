@@ -1,4 +1,3 @@
-vimeo.com
 coda.io
 code.gov
 coinbase.com
