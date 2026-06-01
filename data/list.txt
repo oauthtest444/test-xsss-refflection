@@ -1,4 +1,3 @@
-browserstack.com
 buddypress.org
 budgetair.com
 byairbnb.com
