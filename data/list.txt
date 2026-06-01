@@ -1,4 +1,3 @@
-braintreepayments.com
 braintree.tools
 bridge.xyz
 browserstack.com
