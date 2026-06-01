@@ -1,4 +1,3 @@
-gethypr.com
 getmeetio.com
 githubapp.com
 github.net
