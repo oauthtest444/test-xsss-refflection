@@ -1,4 +1,3 @@
-gs-mosaic.gs
 gs-mosaic.qa
 gspublishing.com
 gsselect.com
