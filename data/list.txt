@@ -1,4 +1,3 @@
-gs.com
 gs.de
 gs-mosaic.gs
 gs-mosaic.qa
