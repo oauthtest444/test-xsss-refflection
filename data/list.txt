@@ -1,4 +1,3 @@
-gocardless-cicd.io
 gocardless.com
 gocardless.io
 goldman.com
