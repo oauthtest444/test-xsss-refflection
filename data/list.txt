@@ -1,6 +1,4 @@
-githubapp.com
 github.net
-githubusercontent.com
 gitlab.net
 gitlab.org
 gitlap.com
