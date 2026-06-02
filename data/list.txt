@@ -1,4 +1,3 @@
-hoteltonight.com
 hoteltonight-test.com
 houseoffun.com
 hubapi.com
