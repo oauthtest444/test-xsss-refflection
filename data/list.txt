@@ -1,4 +1,3 @@
-gitlap.com
 wordpress.org
 glassdoor.com
 global-liquidity.gs
