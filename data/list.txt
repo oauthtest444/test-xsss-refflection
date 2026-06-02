@@ -1,4 +1,3 @@
-guildwars2.com
 guildwars.com
 hackerone-ext-content.com
 hackerone-user-content.com
