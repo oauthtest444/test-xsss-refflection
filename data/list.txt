@@ -1,4 +1,3 @@
-gocardless.io
 goldman.com
 goldmanpfm.com
 goldmansachs.com
