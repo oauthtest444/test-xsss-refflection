@@ -1,4 +1,3 @@
-guilded.gg
 guildwars2.com
 guildwars.com
 hackerone-ext-content.com
