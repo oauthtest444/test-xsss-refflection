@@ -1,4 +1,3 @@
-glassdoor.com
 global-liquidity.gs
 gocardless-banking.io
 gocardless-cicd.io
