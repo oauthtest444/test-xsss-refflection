@@ -1,4 +1,3 @@
-global-liquidity.gs
 gocardless-banking.io
 gocardless-cicd.io
 gocardless.com
