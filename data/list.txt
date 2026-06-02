@@ -1,4 +1,3 @@
-gocardless-banking.io
 gocardless-cicd.io
 gocardless.com
 gocardless.io
