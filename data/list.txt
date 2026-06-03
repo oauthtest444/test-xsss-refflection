@@ -1,4 +1,3 @@
-irccloud-cdn.com
 irccloud.com
 jansport.com
 jit.si
