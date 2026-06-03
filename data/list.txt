@@ -1,4 +1,3 @@
-line-apps.com
 line.biz
 linecorp.com
 line.me
