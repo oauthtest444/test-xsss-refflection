@@ -1,4 +1,3 @@
-workers.dev
 magicjackpot.ro
 magisto.com
 marcus.com
