@@ -1,4 +1,3 @@
-lystit.com
 magiceden.dev
 magiceden.io
 workers.dev
