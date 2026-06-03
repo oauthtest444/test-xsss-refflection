@@ -1,4 +1,3 @@
-instacart.com
 instacart.tools
 irccloud-cdn.com
 irccloud.com
