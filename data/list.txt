@@ -1,4 +1,3 @@
-line.biz
 linecorp.com
 line.me
 naver.jp
