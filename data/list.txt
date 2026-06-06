@@ -1,4 +1,3 @@
-ftl.netflix
 projectbaseline.com
 psynet.gg
 psyonix.com
