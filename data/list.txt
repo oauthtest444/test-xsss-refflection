@@ -1,4 +1,3 @@
-moonpaycloud.com
 moonpay.com
 m-pesa.com
 msgsvc.io
