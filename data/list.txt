@@ -1,4 +1,3 @@
-paypal.com
 paypalcorp.com
 shopifyinc.com
 percy.io
