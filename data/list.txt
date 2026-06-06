@@ -1,4 +1,3 @@
-qaglobal-liquidity.gs
 quip.com
 quixel.com
 quora.com
