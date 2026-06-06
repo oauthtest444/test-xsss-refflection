@@ -1,4 +1,3 @@
-dradis.netflix
 ftl.netflix
 projectbaseline.com
 psynet.gg
