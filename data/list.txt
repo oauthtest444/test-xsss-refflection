@@ -1,4 +1,3 @@
-preemptsecurity.com
 prod.cloud
 dradis.netflix
 ftl.netflix
