@@ -1,4 +1,3 @@
-superbet.rs
 superdrug.com
 superpal.com
 superpal.io
