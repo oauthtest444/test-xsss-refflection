@@ -1,4 +1,3 @@
-savers.co
 sbgcdn.com
 sbgcore.com
 sbgorigin.com
