@@ -1,4 +1,3 @@
-staging-airtableblocks.com
 airtable.com
 staticwars.com
 streamlabs.com
