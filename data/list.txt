@@ -1,4 +1,3 @@
-airtable.com
 staticwars.com
 streamlabs.com
 stripe.com
