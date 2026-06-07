@@ -1,4 +1,3 @@
-superbet.pl
 superbet.ro
 superbet.rs
 superdrug.com
