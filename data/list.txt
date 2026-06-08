@@ -1,4 +1,3 @@
-urbandictionary.biz
 urbandictionary.blog
 urbandictionary.com
 urbandictionary.net
