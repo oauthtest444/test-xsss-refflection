@@ -1,4 +1,3 @@
-vans.com
 varonis.com
 varonis.io
 varonis.net
