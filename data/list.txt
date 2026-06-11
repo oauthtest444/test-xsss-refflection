@@ -1,4 +1,3 @@
-humo.be
 intergamma.cloud
 intergamma.nl
 intergamma-test.nl
