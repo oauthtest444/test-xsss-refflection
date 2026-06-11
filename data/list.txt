@@ -1,4 +1,3 @@
-allegro.pl
 allegro.sk
 personio.com
 personio-dev.com
