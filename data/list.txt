@@ -1,4 +1,3 @@
-sportbild.de
 spring-media.de
 springtools.de
 sqills-bugbounty-test.cloud
