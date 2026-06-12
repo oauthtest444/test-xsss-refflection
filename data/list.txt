@@ -1,4 +1,3 @@
-subdomain.center
 bingx.com
 bingx.pro
 bitforex.com
