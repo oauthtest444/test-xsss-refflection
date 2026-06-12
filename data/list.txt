@@ -1,4 +1,3 @@
-playuzleuven.be
 prod-ffs.io
 nube.tech
 intigriti.rocks
