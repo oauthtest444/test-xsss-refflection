@@ -1,4 +1,3 @@
-sqills-bugbounty-test.cloud
 sqills.com
 sqills.team
 tomorrowland.com
