@@ -1,4 +1,3 @@
-petbook.de
 petbook-magazine.com
 playuzleuven.be
 prod-ffs.io
