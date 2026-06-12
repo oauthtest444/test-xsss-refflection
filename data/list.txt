@@ -1,4 +1,3 @@
-stylebook.de
 swisspass.ch
 techbook.de
 ticketing.cm
