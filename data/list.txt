@@ -1,4 +1,3 @@
-chainstack.net
 coingecko.com
 coinmetro.com
 coinsbit.io
