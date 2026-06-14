@@ -18,7 +18,7 @@ jobs:
 
       - name: Setup Tools
         run: |
-          chmod +x tools/dedup.sh
+          chmod +x tools/dedup.py
           chmod +x tools/reflect.sh
           chmod +x tools/reflect2.sh
 
@@ -47,7 +47,7 @@ jobs:
 
           # === Deduplication ===
           if [ -s q-urls.txt ]; then
-            ./tools/dedup.sh -f q-urls.txt -o final-urls.txt
+            ./tools/dedup.py -f q-urls.txt -o final-urls.txt
           else
             # No parameters found, just update list
             git config --global user.name "system"
