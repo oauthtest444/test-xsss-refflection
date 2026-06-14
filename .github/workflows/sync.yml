@@ -47,7 +47,7 @@ jobs:
 
           # === Deduplication ===
           if [ -s q-urls.txt ]; then
-            python /tools/dedup.py -f q-urls.txt -o final-urls.txt
+            python tools/dedup.py -f q-urls.txt -o final-urls.txt
           else
             # No parameters found, just update list
             git config --global user.name "system"
