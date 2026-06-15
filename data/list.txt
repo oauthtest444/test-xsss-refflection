@@ -1,4 +1,3 @@
-tvgateway.ru
 userapi.com
 vk.cc
 vk-cdn.net
