@@ -1,4 +1,3 @@
-tarantool.io
 tarantoolplus.ru
 target.my
 tbank.ru
