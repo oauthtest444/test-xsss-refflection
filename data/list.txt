@@ -1,4 +1,3 @@
-tarantoolplus.ru
 target.my
 tbank.ru
 tcsbank.ru
