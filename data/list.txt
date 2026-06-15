@@ -1,4 +1,3 @@
--mail.ru
 digital-insider.ru
 disk-o.cloud
 dzeninfra.ru
