@@ -1,4 +1,3 @@
-surfy.ru
 tamtam.chat
 tarantool.io
 tarantoolplus.ru
