@@ -1,4 +1,3 @@
-target.my
 tbank.ru
 tcsbank.ru
 tinkoffinsurance.ru
