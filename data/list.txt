@@ -1,4 +1,3 @@
-apiok.ru
 subdomain.center
 restaff.work
 appsmail.ru
