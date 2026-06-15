@@ -1,4 +1,3 @@
-tamtam.chat
 tarantool.io
 tarantoolplus.ru
 target.my
