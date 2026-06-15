@@ -1,4 +1,3 @@
-support.tech
 surfy.ru
 tamtam.chat
 tarantool.io
