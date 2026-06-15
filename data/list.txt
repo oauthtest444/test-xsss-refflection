@@ -1,4 +1,3 @@
-tinkoff.ru
 tvgateway.ru
 userapi.com
 vk.cc
