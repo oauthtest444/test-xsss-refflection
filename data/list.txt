@@ -1,4 +1,3 @@
-relap.info
 relap.io
 relap.org
 relap.ru
