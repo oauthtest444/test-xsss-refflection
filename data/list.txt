@@ -1,4 +1,3 @@
-skillbox.pro
 skillbox.ru
 skillfactory.ru
 skillfactory.tech
