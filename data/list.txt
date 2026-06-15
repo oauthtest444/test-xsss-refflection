@@ -1,4 +1,3 @@
-disk-o.cloud
 dzeninfra.ru
 dzen.ru
 ebs.ru
