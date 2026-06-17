@@ -1,4 +1,3 @@
-asana.com
 asana.biz
 atlassian.com
 atl-paas.net
