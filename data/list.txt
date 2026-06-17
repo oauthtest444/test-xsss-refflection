@@ -1,4 +1,3 @@
-atlassian.net
 atlastunnel.com
 loom.com
 auth0app.com
