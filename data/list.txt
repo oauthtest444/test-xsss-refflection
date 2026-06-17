@@ -1,4 +1,3 @@
-bitgo.com
 taxify.eu
 bolt.eu
 bugcrowd.net
