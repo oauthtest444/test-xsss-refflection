@@ -19,7 +19,7 @@ jobs:
       - name: Setup Tools
         run: |
           chmod +x tools/dedup.py
-          chmod +x tools/reflect.sh
+          chmod +x tools/reflect.py
           chmod +x tools/reflect2.sh
 
       - name: Process Task
@@ -60,7 +60,7 @@ jobs:
 
           # === Run XSS Reflection Tools ===
           if [ -s final-urls.txt ]; then
-            ./tools/reflect.sh -l final-urls.txt -o results.txt
+            python tools/reflect.py -l final-urls.txt -o results.txt
           fi
 
           # === Commit updated target list ===
