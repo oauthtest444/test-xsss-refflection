@@ -1,4 +1,3 @@
-canva-apps.cn
 cash.app
 cashstaging.app
 chimepayments.com
