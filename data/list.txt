@@ -1,4 +1,3 @@
-saltlabs.com
 meraki.com
 ikarem.io
 network-auth.com
