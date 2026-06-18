@@ -1,4 +1,3 @@
-movilepay.com
 com.br
 zoop.ws
 imperva.com
