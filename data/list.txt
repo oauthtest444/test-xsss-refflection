@@ -1,4 +1,3 @@
-canva.cn
 canva-apps.cn
 cash.app
 cashstaging.app
