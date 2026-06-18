@@ -1,4 +1,3 @@
-meraki.com
 ikarem.io
 network-auth.com
 gv.at
