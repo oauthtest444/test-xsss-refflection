@@ -1,4 +1,3 @@
-cashstaging.app
 chimepayments.com
 chime.com
 1debit.com
