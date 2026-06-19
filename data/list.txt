@@ -1,4 +1,3 @@
-mgm.mo
 mlife.mo
 mgmmacau.com
 monash.edu
