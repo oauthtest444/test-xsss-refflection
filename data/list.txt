@@ -1,4 +1,3 @@
-zoop.ws
 imperva.com
 cloudvector.com
 incapsula.com
