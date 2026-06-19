@@ -1,3 +1,5 @@
+imperva.com
+cloudvector.com
 incapsula.com
 indeed.com
 indeedflex.com
@@ -17,7 +19,6 @@ bistro.sk
 just-eat.es
 just-eat.co.uk
 just-eat.ch
-co.il
 scoober.com
 jet-external.com
 just-eat.com
@@ -32,8 +33,6 @@ designify.com
 kaleido.ai
 unscreen.com
 kucoin.com
-com.au
-co.nz
 genoapay.com
 latitudefinancial.com
 latitudepay.com
@@ -54,7 +53,6 @@ playlist.link
 mylink.page
 lululemon.com
 luno.com
-com.ng
 mattermost.com
 mgm.mo
 mlife.mo
@@ -66,8 +64,6 @@ nr-ops.net
 northwesternmutual.com
 nml.com
 nmfn.com
-com.mx
-com.co
 octopus.com
 openai.org
 openai.com
@@ -202,7 +198,6 @@ audible.co.uk
 audible.in
 audible.fr
 audible.es
-co.jp
 audible.it
 audible.de
 bybit.com
@@ -353,10 +348,7 @@ amazon.ca
 amazon.cl
 amazon.cn
 amazon.co.uk
-co.za
 amazon.com
-com.be
-com.tr
 amazon.de
 amazon.eg
 amazon.es
@@ -452,9 +444,6 @@ creditkarma.com
 adminml.com
 mercadolibre.cl
 mercadolibre.com
-com.ar
-com.pe
-com.uy
 mercadopago.cl
 mercadopago.com
 mlstatic.com
@@ -791,7 +780,6 @@ techbook.de
 travelbook.de
 wissen-sie-mehr.de
 bmc.nl
-cm.com
 backend-capital.com
 capital.com
 itcapital.io
@@ -909,13 +897,6 @@ studiopress.com
 wpengine.io
 wpesvc.net
 water-link.be
-com.hk
-co.th
-com.tw
-com.sg
-com.ph
-com.my
-co.id
 watsons.vn
 pns.hk
 parknshop.com
