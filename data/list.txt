@@ -1,4 +1,3 @@
-song.link
 songlink.io
 album.link
 artist.link
