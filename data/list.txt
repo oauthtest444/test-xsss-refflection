@@ -1,4 +1,3 @@
-album.link
 artist.link
 pods.link
 playlist.link
