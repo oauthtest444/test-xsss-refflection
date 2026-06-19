@@ -1,4 +1,3 @@
-openai.com
 sec-tunnel.com
 opera.com
 opera-mini.net
