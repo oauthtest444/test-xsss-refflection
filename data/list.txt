@@ -1,4 +1,3 @@
-songlink.io
 album.link
 artist.link
 pods.link
