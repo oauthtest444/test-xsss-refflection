@@ -1,4 +1,3 @@
-unico.app
 nflxext.com
 nflximg.net
 nflxso.net
