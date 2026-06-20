@@ -1,4 +1,3 @@
-andurildev.au
 andurildev.com
 twilio.com
 rhinternal.net
