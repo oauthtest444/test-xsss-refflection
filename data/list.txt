@@ -1,4 +1,3 @@
-audible.fr
 audible.es
 audible.it
 audible.de
