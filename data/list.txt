@@ -1,4 +1,3 @@
-bybit.eu
 bybit.tr
 budgetair.com
 cheaptickets.nl
