@@ -1,4 +1,3 @@
-bancoplata.mx
 platacard.mx
 konghq.com
 kongcloud.io
