@@ -1,4 +1,3 @@
-skinfra.xyz
 jobapi.net
 sol-data.com
 aips-internal.com
