@@ -1,4 +1,3 @@
-mongodb.com
 ripiotrade.co
 deribit.com
 hilton.com
