@@ -1,4 +1,3 @@
-superbet.gr
 superbet.pl
 superbet.ro
 superbet.rs
