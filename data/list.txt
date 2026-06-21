@@ -1,4 +1,3 @@
-recko.io
 reckoproduction.com
 reckostaging.com
 stripe.com
