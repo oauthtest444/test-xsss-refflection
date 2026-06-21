@@ -1,4 +1,3 @@
-indriver.io
 m-pesa.com
 metamask.io
 floqast.app
