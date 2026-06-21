@@ -1,4 +1,3 @@
-floqast.app
 mongodb.com
 ripiotrade.co
 deribit.com
