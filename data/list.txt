@@ -1,4 +1,3 @@
-metamask.io
 floqast.app
 mongodb.com
 ripiotrade.co
