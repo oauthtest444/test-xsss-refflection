@@ -1,4 +1,3 @@
-miot-spec.org
 mipay.com
 mipay.net
 miui.cn
