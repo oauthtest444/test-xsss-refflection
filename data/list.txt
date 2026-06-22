@@ -1,4 +1,3 @@
-truecaller.com
 exodus.io
 exodus.com
 k8s.io
