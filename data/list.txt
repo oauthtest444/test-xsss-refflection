@@ -1,4 +1,3 @@
-mios.cn
 miot-spec.org
 mipay.com
 mipay.net
