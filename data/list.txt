@@ -1,4 +1,3 @@
-exodus.io
 exodus.com
 k8s.io
 dynatracelabs.com
