@@ -1,4 +1,3 @@
-onegraph.com
 netlify.com
 fanduel.com
 fndlsb.net
