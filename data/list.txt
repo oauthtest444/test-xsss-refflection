@@ -1,4 +1,3 @@
-elasticsearch.org
 elasticsearch.wtf
 elstc.co
 eops.nl
