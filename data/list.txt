@@ -1,4 +1,3 @@
-logstash.net
 logstash.wtf
 prelert.com
 swiftype.com
