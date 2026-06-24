@@ -1,4 +1,3 @@
-estccdn.com
 found.io
 insight.io
 kibana.wtf
