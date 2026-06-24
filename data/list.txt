@@ -1,4 +1,3 @@
-booth.pm
 crypto.com
 mona.co
 betfair.com
