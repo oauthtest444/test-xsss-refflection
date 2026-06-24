@@ -1,4 +1,3 @@
-bionic.ai
 crowdstrike.com
 flowsecurity.app
 humio.com
