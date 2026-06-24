@@ -1,4 +1,3 @@
-elasticsearch.com
 elasticsearch.fr
 elasticsearch.jp
 elasticsearch.org
