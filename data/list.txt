@@ -1,4 +1,3 @@
-ela.st
 elastic.co
 elastic.dev
 elastic.wtf
