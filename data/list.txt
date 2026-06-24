@@ -1,4 +1,3 @@
-kibana.wtf
 logstash.net
 logstash.wtf
 prelert.com
