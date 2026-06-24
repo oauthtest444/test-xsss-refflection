@@ -1,4 +1,3 @@
-insight.io
 kibana.wtf
 logstash.net
 logstash.wtf
