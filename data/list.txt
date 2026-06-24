@@ -1,4 +1,3 @@
-acronis.work
 devicelock.com
 braintree-api.com
 braintreegateway.com
