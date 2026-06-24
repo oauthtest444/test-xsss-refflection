@@ -1,4 +1,3 @@
-flowsecurity.app
 humio.com
 preempt.com
 preemptsecurity.com
