@@ -1,4 +1,3 @@
-elasticapm.co
 elasticbeats.wtf
 elasticcloud.wtf
 elasticgov.com
