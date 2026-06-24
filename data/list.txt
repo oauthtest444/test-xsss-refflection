@@ -1,4 +1,3 @@
-braintreegateway.com
 braintreepayments.com
 hyperwallet.com
 paydiant.com
