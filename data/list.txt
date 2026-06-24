@@ -1,4 +1,3 @@
-fromspotify.com
 spotify.com
 spotify.net
 tospotify.com
