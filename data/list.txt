@@ -1,4 +1,3 @@
-airbnb.org
 airbnbcitizen.com
 airbnbpayments.com
 atairbnb.com
