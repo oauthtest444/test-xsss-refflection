@@ -1,4 +1,3 @@
-files.com
 buddypress.org
 wordpress.org
 wordcamp.org
