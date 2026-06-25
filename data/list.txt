@@ -1,4 +1,3 @@
-github.net
 githubapp.com
 githubusercontent.com
 github.io
