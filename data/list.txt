@@ -1,4 +1,3 @@
-airtable.com
 adobe.com
 ubnt.com
 ui.com
