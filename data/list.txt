@@ -1,4 +1,3 @@
-airbnbpayments.com
 atairbnb.com
 byairbnb.com
 hoteltonight-test.com
