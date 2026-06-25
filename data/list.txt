@@ -1,4 +1,3 @@
-buddypress.org
 wordpress.org
 wordcamp.org
 wordpress.net
