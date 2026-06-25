@@ -1,4 +1,3 @@
-sc-core.net
 sc-corp.net
 uberinternal.com
 ubereats.com
