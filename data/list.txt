@@ -1,4 +1,3 @@
-shopifycs.com
 shopifykloud.com
 airbnb-aws.com
 airbnb.com
