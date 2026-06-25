@@ -1,4 +1,3 @@
-staging-airtableblocks.com
 airtable.com
 adobe.com
 ubnt.com
