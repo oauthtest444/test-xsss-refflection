@@ -1,4 +1,3 @@
-atairbnb.com
 byairbnb.com
 hoteltonight-test.com
 hoteltonight.com
