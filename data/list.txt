@@ -1,4 +1,3 @@
-exo.io
 exoscale.ch
 here.com
 hereapi.com
