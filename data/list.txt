@@ -1,4 +1,3 @@
-x.ai
 x.com
 cloudflare.com
 cloudflarepartners.com
