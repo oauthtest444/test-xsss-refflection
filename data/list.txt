@@ -1,4 +1,3 @@
-personio-dev.com
 personio.com
 personio-internal.de
 personio.de
