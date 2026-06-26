@@ -1,4 +1,3 @@
-digitalocean.com
 snapshooter.com
 dropbox.com
 dropboxer.net
