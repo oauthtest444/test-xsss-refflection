@@ -1,4 +1,3 @@
-nic.eu
 registry.eu
 whois.eu
 itscope.com
