@@ -1,4 +1,3 @@
-localwp.com
 nitropack.io
 studiopress.com
 wpengine.io
