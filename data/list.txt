@@ -1,4 +1,3 @@
-prod-ffs.io
 ninjakiwi.me
 nkstatic.com
 personio-dev.com
