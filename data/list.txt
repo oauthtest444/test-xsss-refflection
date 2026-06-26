@@ -1,4 +1,3 @@
-marionnaud.sk
 mobilevikings.be
 monzo.com
 prod-ffs.io
