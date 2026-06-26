@@ -1,4 +1,3 @@
-allegrosandbox.pl
 asadcdn.com
 bild.de
 sportbild.de
