@@ -1,4 +1,3 @@
-exoscale.ch
 here.com
 hereapi.com
 hln.be
