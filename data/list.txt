@@ -1,4 +1,3 @@
-petbook.de
 stylebook.de
 techbook.de
 travelbook.de
