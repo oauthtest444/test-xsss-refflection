@@ -1,4 +1,3 @@
-dropxl.com
 gopayapi.com
 gofin.io
 findaya.com
