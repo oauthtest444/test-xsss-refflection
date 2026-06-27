@@ -1,4 +1,3 @@
-ezvizru.com
 gojekapi.com
 gojek.com
 golabs.io
