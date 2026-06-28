@@ -17,7 +17,7 @@ XSS_CONTENT_TYPES = {
     'application/xml', 'application/xhtml+xml'
 }
 
-WEBHOOK_URL = "https://discord.com/api/webhooks/1519135976151060481/2x59PAU2mFHUpEm7dLBiJIooVDN1mtag0XKfOItlY55uYDBS6pxg2zu0W-6cT4dwGfMz"
+WEBHOOK_URL = "https://discord.com/api/webhooks/1519586108826980383/VWGSRj_pCfaE0tQcOsXpg4JbDZsZW-mj25aD0SjIxjQMkKQmPZDcmn9hOGRN-YTbyGnM"
 
 def is_executable_content_type(content_type):
     if not content_type:
