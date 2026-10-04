@@ -1,4 +1,0 @@
-https://api-shein.shein.com/affiliate/recruit
-https://api-shein.shein.com/ark/14286
-https://api-shein.shein.com/h5/bff-api/product/recommend/ccc_component_common
-https://api-shein.shein.com/h5/card-collection-share/share
