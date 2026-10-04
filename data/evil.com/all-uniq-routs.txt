@@ -1,0 +1,10 @@
+http://evil.com/
+http://www.evil.com/
+http://www.evil.com/_vti_bin/fpcount.exe/
+http://www.evil.com:80/icons/
+https://evil.com/nonce
+http://attacker.evil.com/
+http://c2-server.evil.com/
+https://external.evil.com/
+https://frame.evil.com/
+https://inline.evil.com/
