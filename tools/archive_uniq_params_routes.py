@@ -18,7 +18,7 @@ Dependencies:
 
 Examples:
     python route_params_recon.py -f list.txt
-    python route_params_recon.py -f list.txt -uo uniq-all-urls.txt -po params.txt
+    python route_params_recon.py -f list.txt -ro uniq-all-urls.txt -po params.txt
     python route_params_recon.py -f list.txt -t 20 --timeout 8
     python route_params_recon.py -f list.txt --no-validate
     python route_params_recon.py -f list.txt --no-pattern-dedupe
@@ -91,7 +91,7 @@ def parse_args() -> argparse.Namespace:
         help="File containing archive URLs, one URL per line.",
     )
     p.add_argument(
-        "-uo", "--url-output", default="uniq-all-urls.txt",
+        "-ro", "--route-output", default="uniq-all-urls.txt",
         help="Validated unique full-URL output (default: uniq-all-urls.txt)",
     )
     p.add_argument(
