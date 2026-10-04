@@ -1,74 +1,258 @@
-name: Background Sync
+name: Continuous Recon Scanner
 
 on:
-  push:
-    branches:
-      - main
   workflow_dispatch:
+  schedule:
+    # Every 6 hours leaves ~15 minutes after the 5h45m scan window.
+    - cron: "0 */6 * * *"
+
+permissions:
+  contents: write
+
+concurrency:
+  group: continuous-recon-scanner
+  cancel-in-progress: false
 
 jobs:
-  update:
+  scan:
     runs-on: ubuntu-latest
+    timeout-minutes: 345 # 5 hours 45 minutes
+    env:
+      PYTHONUNBUFFERED: "1"
+      DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
 
     steps:
-      - name: Checkout
+      - name: Checkout repository
         uses: actions/checkout@v4
         with:
-          token: ${{ secrets.MY_PAT_TOKEN }}
+          fetch-depth: 0
 
-      - name: Setup Tools
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+          cache-dependency-path: requirements.txt
+
+      - name: Install Python packages
+        run: python -m pip install -r requirements.txt
+
+      - name: Run checkpointed scanner
+        shell: bash
         run: |
-          chmod +x tools/dedup.py
-          chmod +x tools/reflect.py
-          chmod +x tools/reflect2.sh
+          set -Eeuo pipefail
 
-      - name: Process Task
-        run: |
-          if [ ! -s data/list.txt ]; then
-            exit 0
+          ROOT="$PWD"
+          DATA="$ROOT/data"
+          TOOLS="$ROOT/tools"
+          DOMAINS="$DATA/all-domains.txt"
+          STATE="$DATA/.scan-state.json"
+          START_EPOCH="$(date +%s)"
+          # Keep a small margin below the hard 345-minute GitHub job limit.
+          DEADLINE="$((START_EPOCH + 342 * 60))"
+
+          mkdir -p "$DATA"
+
+          python - "$DOMAINS" "$STATE" <<'PY'
+          import json, pathlib, sys
+          domains = pathlib.Path(sys.argv[1])
+          state = pathlib.Path(sys.argv[2])
+          if not state.exists():
+              state.write_text(json.dumps({
+                  "domain_index": 0,
+                  "stage": "archive",
+                  "domain": "",
+              }, indent=2) + "\n")
+          PY
+
+          save_state() {
+            local domain="$1"
+            local stage="$2"
+            local di="$3"
+            python - "$STATE" "$domain" "$stage" "$di" <<'PY'
+          import json, pathlib, sys
+          p = pathlib.Path(sys.argv[1])
+          p.write_text(json.dumps({
+              "domain": sys.argv[2],
+              "stage": sys.argv[3],
+              "domain_index": int(sys.argv[4]),
+          }, indent=2) + "\n")
+          PY
+          }
+
+          git_commit_state() {
+            git config user.name "github-actions[bot]"
+            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git add data
+            if ! git diff --cached --quiet; then
+              git commit -m "scanner: checkpoint $1" || true
+              git push || true
+            fi
+          }
+
+          now() { date +%s; }
+          time_left() { echo $((DEADLINE - $(now))); }
+
+          # Return 0 only if enough time remains for another stage.
+          have_time() {
+            local need="${1:-120}"
+            [[ "$(time_left)" -gt "$need" ]]
+          }
+
+          mapfile -t DOMAINS_LIST < <(
+            grep -Ev '^[[:space:]]*(#|$)' "$DOMAINS" |
+            sed 's/[[:space:]]//g' |
+            sort -fu
+          )
+
+          # Load checkpoint.
+          readarray -t ST < <(python - "$STATE" <<'PY'
+          import json, pathlib, sys
+          s=json.loads(pathlib.Path(sys.argv[1]).read_text())
+          for k in ("domain", "stage", "domain_index"):
+              print(s.get(k, "" if k in ("domain", "stage") else 0))
+          PY
+          )
+          CURRENT_DOMAIN="${ST[0]}"
+          CURRENT_STAGE="${ST[1]}"
+          DOMAIN_INDEX="${ST[2]:-0}"
+
+          # If a previous run finished its domain, advance.
+          if [[ "$CURRENT_STAGE" == "done-domain" ]]; then
+            DOMAIN_INDEX=$((DOMAIN_INDEX + 1))
+            CURRENT_DOMAIN=""
+            CURRENT_STAGE="archive"
           fi
 
-          # Extract one target
-          RAW=$(head -n 1 data/list.txt)
-          TARGET=$(echo "$RAW" | tr -d '\r' | xargs)
-          sed -i '1d' data/list.txt
+          while have_time 180; do
+            if (( DOMAIN_INDEX >= ${#DOMAINS_LIST[@]} )); then
+              echo "[+] All configured domains have been processed."
+              save_state "" "idle" 0
+              git_commit_state "idle"
+              exit 0
+            fi
 
-          if [ -z "$TARGET" ]; then
-            exit 0
-          fi
+            DOMAIN="${DOMAINS_LIST[$DOMAIN_INDEX]}"
+            DOMAIN_DIR="$DATA/$DOMAIN"
+            mkdir -p "$DOMAIN_DIR"
 
-          echo "Processing target: $TARGET" > /dev/null
+            # A domain begins at archive, unless a checkpoint says otherwise.
+            if [[ "$CURRENT_DOMAIN" != "$DOMAIN" ]]; then
+              CURRENT_DOMAIN="$DOMAIN"
+              CURRENT_STAGE="archive"
+              save_state "$DOMAIN" "archive" "$DOMAIN_INDEX"
+              git_commit_state "$DOMAIN-start"
+            fi
 
-          # === Fetch Wayback URLs ===
-          wget -qO urls.txt "https://web.archive.org/cdx/search/cdx?url=${TARGET}&matchType=domain&fl=original&collapse=urlkey&output=text&filter=statuscode:200" || true
+            WORK="$DATA/.work/$DOMAIN"
+            mkdir -p "$WORK"
 
-          # === Filter Parameterized URLs ===
-          fgrep '?' urls.txt | egrep -i -v '\.(js|gif|jpg|jpeg|png|css|html|htm|gz|svg|ico|webp|avif|bmp|txt|pdf|xml|json|map|mp4|webm|ogv|mov|mp3|wav|ogg|flac|aac|m4a|woff|woff2|ttf|otf|eot|zip|rar|7z|tar)(\?|$)' > q-urls.txt || true
+            # ----------------------------------------------------------
+            # Stage: archive — pull query URLs from Wayback CDX
+            # ----------------------------------------------------------
+            if [[ "$CURRENT_STAGE" == "archive" ]]; then
+              if ! have_time 180; then break; fi
+              echo "[*] [$DOMAIN] Fetching archive URLs..."
+              rm -f "$WORK/urls.txt" "$WORK/q-urls.txt"
 
-          # === Deduplication ===
-          if [ -s q-urls.txt ]; then
-            python tools/dedup.py -f q-urls.txt -o final-urls.txt
-          else
-            # No parameters found, just update list
-            git config --global user.name "system"
-            git config --global user.email "system@noreply.github.com"
-            git add data/list.txt
-            git commit -m "chore: update cache" -q
-            git push origin main -q
-            exit 0
-          fi
+              TARGET="https://${DOMAIN}/"
+              wget -qO "$WORK/urls.txt" \
+                "https://web.archive.org/cdx/search/cdx?url=${TARGET}&matchType=domain&fl=original&collapse=urlkey&output=text&filter=statuscode:200" \
+                || true
 
-          # === Run XSS Reflection Tools ===
-          if [ -s final-urls.txt ]; then
-            python tools/reflect.py -l final-urls.txt -o results.txt
-          fi
+              # Keep only URLs that contain query parameters and exclude
+              # common static / non-UI resource extensions.
+              fgrep '?' "$WORK/urls.txt" 2>/dev/null |
+                egrep -i -v '\.(js|gif|jpg|jpeg|png|css|gz|svg|ico|webp|avif|bmp|txt|pdf|xml|json|map|mp4|webm|ogv|mov|mp3|wav|ogg|flac|aac|m4a|woff|woff2|ttf|otf|eot|zip|rar|7z|tar)(\?|$)' \
+                > "$WORK/q-urls.txt" || true
 
-          # === Commit updated target list ===
-          git config --global user.name "system"
-          git config --global user.email "system@noreply.github.com"
-          git add data/list.txt
+              # Deduplicate while preserving order.
+              if [[ -s "$WORK/q-urls.txt" ]]; then
+                awk 'NF && !seen[$0]++' "$WORK/q-urls.txt" > "$WORK/q-urls-uniq.txt"
+                mv "$WORK/q-urls-uniq.txt" "$WORK/q-urls.txt"
+              else
+                : > "$WORK/q-urls.txt"
+              fi
 
-          if ! git diff --cached --quiet; then
-            git commit -m "chore: sync update" -q
-            git push origin main -q
-          fi
+              COUNT=$(wc -l < "$WORK/q-urls.txt" | tr -d ' ')
+              echo "[+] [$DOMAIN] archive stage finished — ${COUNT} query URL(s)"
+              save_state "$DOMAIN" "route-recon" "$DOMAIN_INDEX"
+              git_commit_state "$DOMAIN-archive"
+            fi
+
+            # ----------------------------------------------------------
+            # Stage: route-recon — unique params + unique routes
+            # ----------------------------------------------------------
+            if [[ "$CURRENT_STAGE" == "route-recon" ]]; then
+              if ! have_time 120; then break; fi
+              echo "[*] [$DOMAIN] Running archive_uniq_params_routes..."
+              rm -f "$DOMAIN_DIR/all-uniq-routs.txt" "$DOMAIN_DIR/all-uniq-params.txt"
+
+              if [[ -s "$WORK/q-urls.txt" ]]; then
+                python3 "$TOOLS/archive_uniq_params_routes.py" \
+                  -f "$WORK/q-urls.txt" \
+                  -ro "$DOMAIN_DIR/all-uniq-routs.txt" \
+                  -po "$DOMAIN_DIR/all-uniq-params.txt" || true
+              else
+                : > "$DOMAIN_DIR/all-uniq-routs.txt"
+                : > "$DOMAIN_DIR/all-uniq-params.txt"
+                echo "[i] [$DOMAIN] no archive query URLs — empty outputs"
+              fi
+
+              echo "[+] [$DOMAIN] archive_uniq_params_routes finished"
+              save_state "$DOMAIN" "xss" "$DOMAIN_INDEX"
+              git_commit_state "$DOMAIN-route-recon"
+            fi
+
+            # ----------------------------------------------------------
+            # Stage: xss — reflection checker only
+            # ----------------------------------------------------------
+            if [[ "$CURRENT_STAGE" == "xss" ]]; then
+              if ! have_time 120; then break; fi
+              echo "[*] [$DOMAIN] Running xss_reflect_checker..."
+              rm -f "$DOMAIN_DIR/xss-vulnerable.txt"
+
+              # Ensure input files exist even if previous stage produced nothing.
+              [[ -e "$DOMAIN_DIR/all-uniq-routs.txt" ]] || : > "$DOMAIN_DIR/all-uniq-routs.txt"
+              [[ -e "$DOMAIN_DIR/all-uniq-params.txt" ]] || : > "$DOMAIN_DIR/all-uniq-params.txt"
+
+              python3 "$TOOLS/xss_reflect_checker.py" \
+                -l "$DOMAIN_DIR/all-uniq-routs.txt" \
+                -p "$DOMAIN_DIR/all-uniq-params.txt" \
+                -o "$DOMAIN_DIR/xss-vulnerable.txt" || true
+
+              echo "[+] [$DOMAIN] xss_reflect_checker finished"
+              save_state "$DOMAIN" "complete-domain" "$DOMAIN_INDEX"
+              git_commit_state "$DOMAIN-xss"
+            fi
+
+            # ----------------------------------------------------------
+            # Stage: complete-domain — finalize and advance
+            # ----------------------------------------------------------
+            if [[ "$CURRENT_STAGE" == "complete-domain" ]]; then
+              for f in all-uniq-routs.txt all-uniq-params.txt xss-vulnerable.txt; do
+                [[ -e "$DOMAIN_DIR/$f" ]] || : > "$DOMAIN_DIR/$f"
+              done
+              rm -rf "$WORK"
+              DOMAIN_INDEX=$((DOMAIN_INDEX + 1))
+              CURRENT_DOMAIN=""
+              CURRENT_STAGE="archive"
+              save_state "" "done-domain" "$DOMAIN_INDEX"
+              git_commit_state "$DOMAIN-complete"
+              continue
+            fi
+
+            # Refresh stage from state after each stage transition.
+            readarray -t ST < <(python - "$STATE" <<'PY'
+          import json, pathlib, sys
+          s=json.loads(pathlib.Path(sys.argv[1]).read_text())
+          for k in ("domain", "stage", "domain_index"):
+              print(s.get(k, "" if k in ("domain", "stage") else 0))
+          PY
+            )
+            CURRENT_DOMAIN="${ST[0]}"
+            CURRENT_STAGE="${ST[1]}"
+            DOMAIN_INDEX="${ST[2]:-0}"
+          done
+
+          echo "[+] Scan window ended; next scheduled/manual run resumes from data/.scan-state.json."
