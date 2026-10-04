@@ -25,7 +25,7 @@ Dependencies:
 
 Examples:
     python archive_uniq_params_routes_v2.py -f list.txt
-    python archive_uniq_params_routes_v2.py -f list.txt -uo all-uniq-routs.txt -t 25 --timeout 8
+    python archive_uniq_params_routes_v2.py -f list.txt -ro all-uniq-routs.txt -t 25 --timeout 8
     python archive_uniq_params_routes_v2.py -f list.txt --no-validate
     python archive_uniq_params_routes_v2.py -f list.txt --no-script-dedupe
 """
@@ -97,7 +97,7 @@ def parse_args() -> argparse.Namespace:
         help="File containing archive URLs, one URL per line.",
     )
     p.add_argument(
-        "-uo", "--url-output", default="all-uniq-routs.txt",
+        "-ro", "--url-output", default="all-uniq-routs.txt",
         help="Final unique full-URL output (default: all-uniq-routs.txt)",
     )
     p.add_argument(
