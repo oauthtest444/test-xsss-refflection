@@ -47,11 +47,14 @@ jobs:
           TOOLS="$ROOT/tools"
           DOMAINS="$DATA/all-domains.txt"
           STATE="$DATA/.scan-state.json"
+          # Intermediate archive files live outside the repo so they are
+          # never git-added (avoids GitHub 100 MB file-size limit).
+          WORK_ROOT="${RUNNER_TEMP:-/tmp}/recon-work"
           START_EPOCH="$(date +%s)"
           # Keep a small margin below the hard 345-minute GitHub job limit.
           DEADLINE="$((START_EPOCH + 342 * 60))"
 
-          mkdir -p "$DATA"
+          mkdir -p "$DATA" "$WORK_ROOT"
 
           python - "$DOMAINS" "$STATE" <<'PY'
           import json, pathlib, sys
@@ -80,11 +83,23 @@ jobs:
           PY
           }
 
+          # Only commit small final artifacts + state. Never commit WORK_ROOT.
           git_commit_state() {
             git config user.name "github-actions[bot]"
             git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-            git add data
-            if ! git diff --cached --quiet; then
+            # Explicit paths only — avoids accidentally staging large files.
+            git add -- "$STATE" 2>/dev/null || true
+            # Add every domain result directory (small text outputs only).
+            if [[ -d "$DATA" ]]; then
+              find "$DATA" -maxdepth 2 -type f \( \
+                -name 'all-uniq-routs.txt' -o \
+                -name 'all-uniq-params.txt' -o \
+                -name 'xss-vulnerable.txt' -o \
+                -name 'all-domains.txt' \
+              \) -print0 2>/dev/null | xargs -0 -r git add --
+              git add -- "$STATE" 2>/dev/null || true
+            fi
+            if ! git diff --cached --quiet 2>/dev/null; then
               git commit -m "scanner: checkpoint $1" || true
               git push || true
             fi
@@ -144,40 +159,44 @@ jobs:
               git_commit_state "$DOMAIN-start"
             fi
 
-            WORK="$DATA/.work/$DOMAIN"
+            WORK="$WORK_ROOT/$DOMAIN"
             mkdir -p "$WORK"
 
             # ----------------------------------------------------------
-            # Stage: archive — pull query URLs from Wayback CDX
+            # Stage: archive — stream query URLs from Wayback CDX
+            # Intermediate files stay in WORK_ROOT (outside the repo).
             # ----------------------------------------------------------
             if [[ "$CURRENT_STAGE" == "archive" ]]; then
               if ! have_time 180; then break; fi
               echo "[*] [$DOMAIN] Fetching archive URLs..."
-              rm -f "$WORK/urls.txt" "$WORK/q-urls.txt"
+              rm -f "$WORK/q-urls.txt"
 
               TARGET="https://${DOMAIN}/"
-              wget -qO "$WORK/urls.txt" \
+              # Stream: never write the full CDX dump to disk.
+              # Filter query-URLs and exclude common static extensions.
+              wget -qO- \
                 "https://web.archive.org/cdx/search/cdx?url=${TARGET}&matchType=domain&fl=original&collapse=urlkey&output=text&filter=statuscode:200" \
-                || true
-
-              # Keep only URLs that contain query parameters and exclude
-              # common static / non-UI resource extensions.
-              fgrep '?' "$WORK/urls.txt" 2>/dev/null |
-                egrep -i -v '\.(js|gif|jpg|jpeg|png|css|gz|svg|ico|webp|avif|bmp|txt|pdf|xml|json|map|mp4|webm|ogv|mov|mp3|wav|ogg|flac|aac|m4a|woff|woff2|ttf|otf|eot|zip|rar|7z|tar)(\?|$)' \
+                2>/dev/null |
+                fgrep '?' |
+                egrep -i -v '\.(js|gif|jpg|jpeg|png|css|gz|svg|ico|webp|avif|bmp|txt|pdf|xml|json|map|mp4|webm|ogv|mov|mp3|wav|ogg|flac|aac|m4a|woff|woff2|ttf|otf|eot|zip|rar|7z|tar)(\?|$)' |
+                awk 'NF && !seen[$0]++' \
                 > "$WORK/q-urls.txt" || true
 
-              # Deduplicate while preserving order.
-              if [[ -s "$WORK/q-urls.txt" ]]; then
-                awk 'NF && !seen[$0]++' "$WORK/q-urls.txt" > "$WORK/q-urls-uniq.txt"
-                mv "$WORK/q-urls-uniq.txt" "$WORK/q-urls.txt"
-              else
-                : > "$WORK/q-urls.txt"
-              fi
-
-              COUNT=$(wc -l < "$WORK/q-urls.txt" | tr -d ' ')
+              COUNT=$(wc -l < "$WORK/q-urls.txt" 2>/dev/null | tr -d ' ' || echo 0)
               echo "[+] [$DOMAIN] archive stage finished — ${COUNT} query URL(s)"
+              # Do NOT git-commit q-urls.txt (can be hundreds of MB).
               save_state "$DOMAIN" "route-recon" "$DOMAIN_INDEX"
               git_commit_state "$DOMAIN-archive"
+            fi
+
+            # If we resumed into route-recon but the temp file is gone
+            # (ephemeral runner /tmp), re-fetch archive first.
+            if [[ "$CURRENT_STAGE" == "route-recon" ]]; then
+              if [[ ! -s "$WORK/q-urls.txt" ]]; then
+                echo "[!] [$DOMAIN] q-urls.txt missing — re-running archive fetch"
+                CURRENT_STAGE="archive"
+                continue
+              fi
             fi
 
             # ----------------------------------------------------------
@@ -198,6 +217,9 @@ jobs:
                 : > "$DOMAIN_DIR/all-uniq-params.txt"
                 echo "[i] [$DOMAIN] no archive query URLs — empty outputs"
               fi
+
+              # Free the large intermediate file as soon as it is consumed.
+              rm -f "$WORK/q-urls.txt"
 
               echo "[+] [$DOMAIN] archive_uniq_params_routes finished"
               save_state "$DOMAIN" "xss" "$DOMAIN_INDEX"
