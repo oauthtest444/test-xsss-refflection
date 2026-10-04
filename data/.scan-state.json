@@ -1,5 +1,5 @@
 {
   "domain": "bbbb.com",
-  "stage": "xss",
+  "stage": "complete-domain",
   "domain_index": 0
 }
