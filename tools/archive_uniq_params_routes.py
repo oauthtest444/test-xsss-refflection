@@ -21,7 +21,7 @@ Dependencies:
 
 Examples:
     python archive_uniq_params_routes.py -f list.txt
-    python archive_uniq_params_routes.py -f list.txt -ro all-uniq-routs.txt -po all-uniq-params.txt
+    python archive_uniq_params_routes.py -f list.txt -ro all-uniq-routs.txt -po params.txt
     python archive_uniq_params_routes.py -f list.txt --no-pattern-dedupe
 """
 
@@ -72,7 +72,7 @@ def parse_args() -> argparse.Namespace:
     )
     p.add_argument(
         "-ro", "--route-output", default="all-uniq-routs.txt",
-        help="Unique full-URL output file (default: all-uniq-routs.txt)",
+        help="Final route/URL output file (default: all-uniq-routs.txt)",
     )
     p.add_argument(
         "-po", "--param-output", default="all-uniq-params.txt",
@@ -398,8 +398,8 @@ def main() -> int:
                     if shown >= 5:
                         break
 
-    write_lines(Path(args.url_output), final_urls)
-    print(f"[+] URL output: {args.url_output}")
+    write_lines(Path(args.route_output), final_urls)
+    print(f"[+] URL output: {args.route_output}")
 
     if final_urls:
         out_hosts = Counter(host_key(u) for u in final_urls)
@@ -408,7 +408,7 @@ def main() -> int:
     print()
     print("[+] Done.")
     print(f"[+] Parameters : {args.param_output}")
-    print(f"[+] URLs       : {args.url_output}")
+    print(f"[+] URLs       : {args.route_output}")
     print()
     print("[i] ALL subdomains kept (no single-host filter).")
     print("[i] Full URLs (scheme+host+path), pattern-deduped per host.")
