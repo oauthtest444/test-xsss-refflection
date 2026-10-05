@@ -1,5 +1,5 @@
 {
   "domain": "23andmeresearchinstitute.org",
-  "stage": "route-recon",
+  "stage": "xss",
   "domain_index": 0
 }
