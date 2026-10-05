@@ -21,7 +21,7 @@ Dependencies:
 
 Examples:
     python archive_uniq_params_routes.py -f list.txt
-    python archive_uniq_params_routes.py -f list.txt -ro all-uniq-routs.txt -po params.txt
+    python archive_uniq_params_routes.py -f list.txt -ro all-uniq-routs.txt -po all-uniq-params.txt
     python archive_uniq_params_routes.py -f list.txt --no-pattern-dedupe
 """
 
@@ -117,6 +117,8 @@ def is_static_asset(path: str) -> bool:
 def looks_like_candidate(url: str, strict_ui: bool) -> bool:
     p = urlparse(url)
     if p.scheme not in {"http", "https"}:
+        return False
+    if "/cdn-cgi/challenge-platform/" in (p.path or "").lower():
         return False
     if is_static_asset(p.path or "/"):
         return False
@@ -224,30 +226,85 @@ def extract_query_parameters(urls: Iterable[str]) -> List[str]:
 # ---------------------------------------------------------------------------
 
 def classify_dynamic_segment(segment: str) -> Optional[str]:
+    """Classify a complete path segment as dynamic."""
     for kind, rx in DYNAMIC_SEGMENT_PATTERNS:
         if rx.fullmatch(segment):
             return kind
-    # long opaque tokens
     if len(segment) >= 16 and re.fullmatch(r"[A-Za-z0-9_-]+", segment):
         return "id"
-    # shorter hex ids
     if len(segment) >= 8 and re.fullmatch(r"[0-9a-fA-F]+", segment):
         return "hex"
     return None
 
 
+# Embedded dynamic values are common in archive URLs.  Keep the stable
+# prefix/suffix and normalize only the changing part.
+EMBEDDED_DYNAMIC_PATTERNS = [
+    (
+        "uuid",
+        re.compile(
+            r"^(?P<prefix>.*?)(?P<value>"
+            r"[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-"
+            r"[0-9a-fA-F]{4}-[0-9a-fA-F]{12}"
+            r")(?:$|(?P<suffix>\.[A-Za-z0-9_-]+))"
+        ),
+    ),
+    (
+        "number",
+        re.compile(
+            r"^(?P<prefix>.*?)(?:[_\-=])(?P<value>\d{3,})"
+            r"(?P<suffix>\.[A-Za-z0-9_-]+)?$"
+        ),
+    ),
+    (
+        "number",
+        re.compile(r"^(?P<value>\d{3,})(?P<suffix>\.[A-Za-z0-9_-]+)?$"),
+    ),
+    (
+        "hex",
+        re.compile(
+            r"^(?P<prefix>.*?)(?:[_\-=])(?P<value>[0-9a-fA-F]{8,})"
+            r"(?P<suffix>\.[A-Za-z0-9_-]+)?$"
+        ),
+    ),
+]
+
+
+def normalize_embedded_dynamic_segment(segment: str) -> str:
+    """Normalize dynamic values inside path/file-name segments."""
+    kind = classify_dynamic_segment(segment)
+    if kind:
+        # Preserve extensions for pure dynamic filenames.
+        m = re.fullmatch(r"(\d+|[0-9a-fA-F]{8,})(\.[A-Za-z0-9_-]+)?", segment)
+        if m and m.group(2):
+            return (":number" if m.group(1).isdigit() else ":hex") + m.group(2)
+        return ":" + kind
+
+    for kind, rx in EMBEDDED_DYNAMIC_PATTERNS:
+        m = rx.fullmatch(segment)
+        if not m:
+            continue
+        prefix = m.groupdict().get("prefix") or ""
+        suffix = m.groupdict().get("suffix") or ""
+        return prefix + ":" + kind + suffix
+
+    return segment
+
+
 def route_pattern(url: str) -> str:
     """
-    /ide/19f518ad-0000-0000-0000-000000000000 -> /ide/:uuid
-    /users/123 -> /users/:number
-    /apps/00edb566-dream-goals -> /apps/:id
+    Build a stable route pattern while preserving static text.
+
+    Examples:
+      /users/123 -> /users/:number
+      /svn/archives/000954.php -> /svn/archives/:number.php
+      /svn/archives2/edward_hall_the_perfect_group_size_812.php
+        -> /svn/archives2/edward_hall_the_perfect_group_size_:number.php
+      /akam/13/pixel_64dec186 -> /akam/13/pixel_:hex
     """
     p = urlparse(url)
     parts = [x for x in p.path.split("/") if x]
-    out = []
-    for seg in parts:
-        kind = classify_dynamic_segment(seg)
-        out.append(":" + kind if kind else seg)
+    out = [normalize_embedded_dynamic_segment(seg) for seg in parts]
     return "/" + "/".join(out) if out else "/"
 
 
