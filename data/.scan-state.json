@@ -1,5 +1,5 @@
 {
   "domain": "3cx.com",
-  "stage": "xss",
+  "stage": "complete-domain",
   "domain_index": 0
 }
