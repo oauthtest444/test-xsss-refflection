@@ -1,5 +1,5 @@
 {
   "domain": "23andme.org",
-  "stage": "xss",
+  "stage": "complete-domain",
   "domain_index": 0
 }
