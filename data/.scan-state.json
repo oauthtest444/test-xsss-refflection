@@ -1,5 +1,5 @@
 {
   "domain": "a2develop.com",
-  "stage": "route-recon",
+  "stage": "xss",
   "domain_index": 0
 }
