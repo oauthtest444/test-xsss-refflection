@@ -1,0 +1,12 @@
+http://agentcrm.8x8pilot.com:80/psc/crmupg1/CUSTOMER/CRM/c/RB_SELF_SERVICE.RX_EMAIL_PSWD.GBL
+http://agentcrm.8x8pilot.com:80/psc/crmupg1_1/EMPLOYEE/CRM/s/WEBLIB_TIMEOUT.PT_TIMEOUTWARNING.FieldFormula.IScript_TIMEOUTWARNING
+http://agentcrm.8x8pilot.com:80/psc/crmupg1_1/
+http://agentcrm.8x8pilot.com:80/PSIGW/HttpListeningConnector/
+http://agentcrm.8x8pilot.com:80/psp/crmupg1/EMPLOYEE/CRM/c/RO_ORDER_CAPTURE.P8_POST_ORDER_REP.GBL
+http://agentcrm.8x8pilot.com:80/psp/crmupg1/EMPLOYEE/CRM/h/
+http://agentcrm.8x8pilot.com:80/psp/crmupg1/
+http://agentcrm.8x8pilot.com:80/psp/crmupg1_1/EMPLOYEE/CRM/c/RB_TD_360.RB_TD_360_SRCH.GBL
+http://agentcrm.8x8pilot.com:80/psp/crmupg1_1/
+https://sso.8x8pilot.com/signout/sba_acceptance
+https://sso.8x8pilot.com/signout/sba_staging
+http://virtualmeeting.8x8pilot.com:80/join/
