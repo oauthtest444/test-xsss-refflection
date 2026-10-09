@@ -1,5 +1,5 @@
 {
   "domain": "abritel.fr",
-  "stage": "route-recon",
+  "stage": "xss",
   "domain_index": 0
 }
