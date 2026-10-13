@@ -1,0 +1,8 @@
+https://fs.acronis.work/adfs/ls/
+https://passport.acronis.work/login/checkup
+https://passport.acronis.work/login/otp
+https://passport.acronis.work/login/passkeys
+https://passport.acronis.work/login/password
+https://passport.acronis.work/login
+https://passport.acronis.work/otp/create
+https://passport.acronis.work/passkeys/create
