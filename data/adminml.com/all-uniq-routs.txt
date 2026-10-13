@@ -1,0 +1,12 @@
+http://www.adminml.com:80/Category/
+http://www.adminml.com:80/Property/
+http://www.adminml.com:80/SiteInfo/
+https://auth-meli.adminml.com/api/internal/brand/theme/style-sheet
+https://auth-meli.adminml.com/app/meli_eightfoldprod_1/exk1ti1x1louh5LWw1d8/sso/saml
+https://auth-meli.adminml.com/app/UserHome
+https://auth-meli.adminml.com/oauth2/v1/authorize
+https://auth-preprod-meli.adminml.com/app/UserHome
+https://auth-testing-meli.adminml.com/app/UserHome
+https://login.adminml.com/loginCallback
+https://auth.mercadolibre.adminml.com/login
+https://auth.mercadolibre.adminml.com/user/ssodata
