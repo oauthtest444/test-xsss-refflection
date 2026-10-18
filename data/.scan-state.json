@@ -1,5 +1,5 @@
 {
   "domain": "aida.de",
-  "stage": "route-recon",
+  "stage": "xss",
   "domain_index": 0
 }
